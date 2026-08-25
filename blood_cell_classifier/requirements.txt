@@ -1,0 +1,21 @@
+# ============================================================
+# Un solo entorno para todo el proyecto (entrenar, exportar*, servir).
+# *ya no hay exportación a ONNX: los modelos se usan directo en formato .keras.
+#
+# Compatible con Python 3.10 en adelante, incluyendo 3.13+.
+# (Antes el proyecto usaba tf2onnx para exportar a ONNX, lo cual limitaba
+# la instalación a Python 3.10-3.12. Al quitar ONNX, esa restricción
+# desaparece: usamos tf.keras directo tanto para entrenar como para servir.)
+# ============================================================
+tensorflow>=2.16
+numpy>=1.26
+opencv-python-headless>=4.9
+scikit-learn>=1.4
+matplotlib>=3.8
+seaborn>=0.13
+Pillow>=10.2
+albumentations>=1.4
+tqdm>=4.66
+kagglehub>=0.3.0        # para descargar el dataset verificado desde Kaggle
+Flask>=3.0
+flask-cors>=4.0

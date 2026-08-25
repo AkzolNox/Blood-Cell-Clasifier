@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hematoscope — Clasificación progresiva de células sanguíneas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 40 40" width="28" height="28" aria-hidden="true">
+      <circle cx="20" cy="20" r="18" fill="none" stroke="var(--hematoxylin)" stroke-width="1.5"/>
+      <circle cx="20" cy="20" r="18" fill="none" stroke="var(--eosin)" stroke-width="1.5" stroke-dasharray="4 6"/>
+      <circle cx="20" cy="20" r="6" fill="var(--eosin)"/>
+    </svg>
+    <span class="brand-name">HEMATOSCOPE</span>
+  </div>
+  <div class="eyebrow">clasificación progresiva &middot; proyecto académico</div>
+  <div class="api-status" id="apiStatus">
+    <span class="dot" id="statusDot"></span>
+    <span id="statusText">comprobando backend…</span>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ================= PANEL IZQUIERDO: VISOR DE MUESTRA ================= -->
+  <section class="panel viewer-panel">
+    <h2 class="panel-title"><span class="idx">01</span> Muestra</h2>
+
+    <div class="slide-stage" id="dropZone">
+      <div class="reticle">
+        <span class="tick tick-n"></span><span class="tick tick-s"></span>
+        <span class="tick tick-e"></span><span class="tick tick-w"></span>
+      </div>
+      <img id="preview" class="preview-img" alt="Vista previa de la célula" hidden>
+      <video id="liveVideo" class="preview-img" autoplay playsinline hidden></video>
+      <div class="placeholder" id="placeholder">
+        <p class="placeholder-title">Arrastra una imagen de microscopía</p>
+        <p class="placeholder-sub">o hacé clic para seleccionar un archivo &middot; JPG, PNG, TIFF</p>
+      </div>
+      <input type="file" id="fileInput" accept="image/*" hidden>
+    </div>
+
+    <div class="source-toggle">
+      <button class="btn-toggle active" id="btnModeFile" type="button">Subir imagen</button>
+      <button class="btn-toggle" id="btnModeCamera" type="button">Cámara del microscopio</button>
+    </div>
+
+    <div class="camera-controls" id="cameraControls" hidden>
+      <select class="device-select" id="deviceSelect"></select>
+      <button class="btn-secondary" id="btnStartCamera" type="button">Iniciar cámara</button>
+      <button class="btn-secondary" id="btnCaptureFrame" type="button" disabled>Capturar cuadro</button>
+    </div>
+
+    <label class="auto-analyze-toggle" id="autoAnalyzeRow" hidden>
+      <input type="checkbox" id="autoAnalyzeCheckbox">
+      <span>Analizar automáticamente en vivo (cada 2.5s)</span>
+      <span class="live-dot" id="liveDot" hidden></span>
+    </label>
+
+    <button class="btn-primary" id="analyzeBtn" disabled>Analizar muestra</button>
+    <p class="fineprint">Uso académico. No constituye diagnóstico clínico.</p>
+  </section>
+
+  <!-- ================= PANEL DERECHO: CASCADA DE CLASIFICACIÓN ================= -->
+  <section class="panel cascade-panel">
+    <h2 class="panel-title"><span class="idx">02</span> Cascada de clasificación</h2>
+
+    <div class="cascade">
+      <article class="stage-card" id="stage1Card">
+        <div class="stage-head">
+          <span class="stage-label">ETAPA 1</span>
+          <span class="stage-sub">tipo de célula</span>
+        </div>
+        <div class="stage-result" id="stage1Result">
+          <span class="result-placeholder">esperando muestra…</span>
+        </div>
+        <div class="bars" id="stage1Bars"></div>
+      </article>
+
+      <div class="cascade-arrow" id="cascadeArrow">
+        <svg width="48" height="24" viewBox="0 0 48 24"><path d="M0 12 H40 M32 4 L40 12 L32 20" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </div>
+
+      <article class="stage-card" id="stage2Card">
+        <div class="stage-head">
+          <span class="stage-label">ETAPA 2</span>
+          <span class="stage-sub">subtipo</span>
+        </div>
+        <div class="stage-result" id="stage2Result">
+          <span class="result-placeholder">depende de la etapa 1</span>
+        </div>
+        <div class="bars" id="stage2Bars"></div>
+      </article>
+    </div>
+
+    <div class="description-box" id="descriptionBox" hidden>
+      <p class="description-eyebrow">Nota morfológica</p>
+      <p class="description-text" id="descriptionText"></p>
+    </div>
+
+    <div class="error-box" id="errorBox" hidden></div>
+  </section>
+
+</main>
+
+<canvas id="captureCanvas" hidden></canvas>
+
+<footer class="foot">
+  <span>Backend: <code id="apiUrlLabel">http://localhost:5000</code></span>
+  <span>EfficientNetB0 &middot; TensorFlow/Keras &middot; Flask</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
